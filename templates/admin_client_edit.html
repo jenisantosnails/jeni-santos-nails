@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Jeni Santos Nails | Editar Cliente</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f7f7f7;
+            color: #333;
+        }
+
+        header {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+        }
+
+        header h1 {
+            margin: 0 0 5px 0;
+        }
+
+        header p {
+            margin: 0 0 15px 0;
+            color: #666;
+        }
+
+        nav a {
+            margin-right: 15px;
+            text-decoration: none;
+            color: #333;
+        }
+
+        main {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .form-card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+        }
+
+        .form-card h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-bottom: 18px;
+        }
+
+        .field label {
+            font-weight: bold;
+        }
+
+        .field input,
+        .field textarea {
+            padding: 11px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-family: Arial, sans-serif;
+            font-size: 15px;
+            box-sizing: border-box;
+            width: 100%;
+        }
+
+        .field textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        button,
+        .cancel-link {
+            padding: 11px 18px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 15px;
+        }
+
+        button {
+            background: #333;
+            color: white;
+        }
+
+        .cancel-link {
+            background: #eee;
+            color: #333;
+        }
+
+        .error {
+            background: #ffe5e5;
+            color: #a12626;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 18px;
+        }
+
+        .client-id {
+            color: #777;
+            font-size: 14px;
+            margin-top: -10px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+
+            .form-card {
+                padding: 18px;
+            }
+
+            button,
+            .cancel-link {
+                width: 100%;
+                text-align: center;
+                box-sizing: border-box;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>Jeni Santos Nails</h1>
+    <p>Painel Administrativo</p>
+
+    <nav>
+        <a href="/admin">Dashboard</a>
+        <a href="/admin/appointments">Agendamentos</a>
+        <a href="/admin/clients">Clientes</a>
+        <a href="/admin/logout">Sair</a>
+    </nav>
+</header>
+
+<main>
+
+    <section class="form-card">
+
+        <h2>Editar cliente</h2>
+
+        <p class="client-id">
+            Cliente #{{ client.id }}
+        </p>
+
+        {% if error %}
+
+            <div class="error">
+                {{ error }}
+            </div>
+
+        {% endif %}
+
+        <form method="post" action="/admin/clients/{{ client.id }}/edit">
+
+            <div class="field">
+
+                <label for="name">
+                    Nome
+                </label>
+
+                <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    value="{{ client.name }}"
+                    maxlength="120"
+                    required
+                >
+
+            </div>
+
+            <div class="field">
+
+                <label for="phone">
+                    Telefone
+                </label>
+
+                <input
+                    type="text"
+                    id="phone"
+                    name="phone"
+                    value="{{ client.phone }}"
+                    maxlength="20"
+                    required
+                >
+
+            </div>
+
+            <div class="field">
+
+                <label for="email">
+                    E-mail
+                </label>
+
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value="{{ client.email or '' }}"
+                    maxlength="150"
+                >
+
+            </div>
+
+            <div class="field">
+
+                <label for="notes">
+                    Observações
+                </label>
+
+                <textarea
+                    id="notes"
+                    name="notes"
+                >{{ client.notes or '' }}</textarea>
+
+            </div>
+
+            <div class="actions">
+
+                <button type="submit">
+                    Salvar alterações
+                </button>
+
+                <a
+                    class="cancel-link"
+                    href="/admin/clients"
+                >
+                    Cancelar
+                </a>
+
+            </div>
+
+        </form>
+
+    </section>
+
+</main>
+
+</body>
+</html>

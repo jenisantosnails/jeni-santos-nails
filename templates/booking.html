@@ -1,0 +1,2429 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Agendamento | Jeni Santos Nails</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f8f5f2;
+            color: #333;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 30px 20px 50px;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+
+        .logo p {
+            margin-top: 8px;
+            color: #777;
+        }
+
+        .progress {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            gap: 8px;
+        }
+
+        .progress-step {
+            flex: 1;
+            text-align: center;
+            font-size: 13px;
+            color: #999;
+        }
+
+        .progress-step.active {
+            color: #333;
+            font-weight: bold;
+        }
+
+        .progress-number {
+            width: 32px;
+            height: 32px;
+            margin: 0 auto 6px;
+            border-radius: 50%;
+            background: #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .progress-step.active .progress-number {
+            background: #333;
+            color: white;
+        }
+
+        .step {
+            display: none;
+            background: white;
+            border-radius: 16px;
+            padding: 28px;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
+        }
+
+        .step.active {
+            display: block;
+        }
+
+        h1 {
+            margin-top: 0;
+            font-size: 25px;
+        }
+
+        h2 {
+            font-size: 19px;
+            margin-top: 28px;
+            margin-bottom: 14px;
+        }
+
+        .description {
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .field {
+            margin-bottom: 20px;
+        }
+
+        .field label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: bold;
+        }
+
+        .field input,
+        .field textarea {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #ddd;
+            border-radius: 9px;
+            font-size: 15px;
+            font-family: inherit;
+        }
+
+        .field textarea {
+            min-height: 90px;
+            resize: vertical;
+        }
+
+        .service-list,
+        .time-list {
+            display: grid;
+            gap: 12px;
+        }
+
+        .service-option,
+        .time-option {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background: white;
+            cursor: pointer;
+            text-align: left;
+            font-size: 15px;
+        }
+
+        .service-option:hover,
+        .time-option:hover {
+            border-color: #555;
+        }
+
+        .service-option.selected,
+        .time-option.selected {
+            border-color: #333;
+            background: #f2efec;
+        }
+
+        .service-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .service-details {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 28px;
+        }
+
+        button {
+            font-family: inherit;
+        }
+
+        .button-primary,
+        .button-secondary {
+            flex: 1;
+            padding: 14px 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .button-primary {
+            border: none;
+            background: #333;
+            color: white;
+        }
+
+        .button-secondary {
+            border: 1px solid #ccc;
+            background: white;
+            color: #333;
+        }
+
+        .button-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .message {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 9px;
+            background: #f2efec;
+            color: #555;
+            display: none;
+            line-height: 1.5;
+        }
+
+        .message.show {
+            display: block;
+        }
+
+        .summary {
+            background: #f7f4f1;
+            border-radius: 12px;
+            padding: 18px;
+            margin-top: 20px;
+            line-height: 1.7;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            border-bottom: 1px solid #e5e0dc;
+            padding: 8px 0;
+        }
+
+        .summary-row:last-child {
+            border-bottom: none;
+        }
+
+        .summary-label {
+            color: #777;
+        }
+
+        .summary-value {
+            font-weight: bold;
+            text-align: right;
+        }
+
+        .protocol-box {
+            margin-top: 24px;
+            padding: 20px;
+            border: 1px solid #e1ddd9;
+            border-radius: 12px;
+            background: #fff;
+        }
+
+        .protocol-question {
+            margin-bottom: 20px;
+        }
+
+        .protocol-question > label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 10px;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            font-weight: normal;
+        }
+
+        .radio-option input {
+            width: auto;
+        }
+
+        .conditional-field {
+            display: none;
+            margin-top: 10px;
+        }
+
+        .conditional-field.show {
+            display: block;
+        }
+
+        .protocol-existing {
+            background: #f7f4f1;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .policy-box {
+            margin-top: 24px;
+            padding: 20px;
+            border: 1px solid #e1ddd9;
+            border-radius: 12px;
+            background: #faf9f7;
+        }
+
+        .policy-box h2 {
+            margin-top: 0;
+        }
+
+        .policy-list {
+            margin: 0;
+            padding-left: 20px;
+            line-height: 1.7;
+            color: #555;
+        }
+
+        .policy-acceptance {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-top: 18px;
+            line-height: 1.5;
+            cursor: pointer;
+        }
+
+        .policy-acceptance input {
+            margin-top: 4px;
+            flex-shrink: 0;
+        }
+
+        .small-note {
+            margin-top: 18px;
+            color: #888;
+            font-size: 13px;
+            line-height: 1.5;
+            text-align: center;
+        }
+
+        .loading {
+            color: #777;
+            padding: 15px 0;
+        }
+
+        .weekend-contact {
+            display: none;
+            margin-top: 12px;
+        }
+
+        .weekend-contact.show {
+            display: block;
+        }
+
+        .weekend-contact .message {
+            margin-top: 0;
+            display: block;
+        }
+
+        .weekend-contact .button-primary {
+            width: 100%;
+            margin-top: 12px;
+        }
+
+        @media (max-width: 600px) {
+
+            .container {
+                padding: 20px 14px 40px;
+            }
+
+            .step {
+                padding: 20px;
+            }
+
+            .progress-step {
+                font-size: 11px;
+            }
+
+            .buttons {
+                flex-direction: column;
+            }
+
+            .summary-row {
+                flex-direction: column;
+                gap: 2px;
+            }
+
+            .summary-value {
+                text-align: left;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="logo">
+
+        <h1>Jeni Santos Nails</h1>
+
+        <p>
+            Agende seu atendimento
+        </p>
+
+    </div>
+
+
+    <!-- ==========================================
+         PROGRESSO
+    =========================================== -->
+
+    <div class="progress">
+
+        <div
+            class="progress-step active"
+            id="progress-1"
+        >
+            <div class="progress-number">
+                1
+            </div>
+
+            Dados
+        </div>
+
+
+        <div
+            class="progress-step"
+            id="progress-2"
+        >
+            <div class="progress-number">
+                2
+            </div>
+
+            Serviço
+        </div>
+
+
+        <div
+            class="progress-step"
+            id="progress-3"
+        >
+            <div class="progress-number">
+                3
+            </div>
+
+            Horário
+        </div>
+
+
+        <div
+            class="progress-step"
+            id="progress-4"
+        >
+            <div class="progress-number">
+                4
+            </div>
+
+            Finalizar
+        </div>
+
+    </div>
+
+
+    <!-- ==========================================
+         ETAPA 1
+    =========================================== -->
+
+    <section
+        class="step active"
+        id="step-1"
+    >
+
+        <h1>
+            Seus dados
+        </h1>
+
+        <p class="description">
+            Vamos começar com algumas informações básicas.
+        </p>
+
+
+        <div class="field">
+
+            <label for="client-name">
+                Nome
+            </label>
+
+            <input
+                type="text"
+                id="client-name"
+                placeholder="Digite seu nome"
+                autocomplete="name"
+            >
+
+        </div>
+
+
+        <div class="field">
+
+            <label for="client-phone">
+                WhatsApp
+            </label>
+
+            <input
+                type="tel"
+                id="client-phone"
+                placeholder="(82) 99999-9999"
+                autocomplete="tel"
+            >
+
+        </div>
+
+
+        <div
+            class="message"
+            id="message-step-1"
+        ></div>
+
+
+        <div class="buttons">
+
+            <button
+                type="button"
+                class="button-primary"
+                onclick="goToStep2()"
+            >
+                Continuar
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- ==========================================
+         ETAPA 2
+    =========================================== -->
+
+    <section
+        class="step"
+        id="step-2"
+    >
+
+        <h1>
+            Escolha o serviço
+        </h1>
+
+        <p class="description">
+            Selecione o serviço que deseja realizar.
+        </p>
+
+
+        <div
+            class="service-list"
+            id="service-list"
+        >
+
+            <div class="loading">
+                Carregando serviços...
+            </div>
+
+        </div>
+
+
+        <div
+            class="message"
+            id="message-step-2"
+        ></div>
+
+
+        <div class="buttons">
+
+            <button
+                type="button"
+                class="button-secondary"
+                onclick="goToStep(1)"
+            >
+                Voltar
+            </button>
+
+            <button
+                type="button"
+                class="button-primary"
+                onclick="goToStep3()"
+            >
+                Continuar
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- ==========================================
+         ETAPA 3
+    =========================================== -->
+
+    <section
+        class="step"
+        id="step-3"
+    >
+
+        <h1>
+            Escolha a data e o horário
+        </h1>
+
+        <p class="description">
+            Selecione uma data e depois escolha um dos horários disponíveis.
+        </p>
+
+
+        <div class="field">
+
+            <label for="appointment-date">
+                Data
+            </label>
+
+            <input
+                type="date"
+                id="appointment-date"
+                onchange="loadAvailableTimes()"
+            >
+
+        </div>
+
+
+        <div class="field">
+
+            <label>
+                Horários disponíveis
+            </label>
+
+            <div
+                class="time-list"
+                id="time-list"
+            >
+
+                <div class="loading">
+                    Escolha uma data para visualizar os horários.
+                </div>
+
+            </div>
+
+            <div
+                class="weekend-contact"
+                id="weekend-contact"
+            >
+
+                <div class="message">
+                    Atendimento somente por encaixe. Entre em contato para verificar a disponibilidade.
+                </div>
+
+                <button
+                    type="button"
+                    class="button-primary"
+                    onclick="contactWeekendAvailability()"
+                >
+                    Consultar disponibilidade
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div
+            class="message"
+            id="message-step-3"
+        ></div>
+
+
+        <div class="buttons">
+
+            <button
+                type="button"
+                class="button-secondary"
+                onclick="goToStep(2)"
+            >
+                Voltar
+            </button>
+
+            <button
+                type="button"
+                class="button-primary"
+                onclick="goToStep4()"
+            >
+                Continuar
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- ==========================================
+         ETAPA 4
+    =========================================== -->
+
+    <section
+        class="step"
+        id="step-4"
+    >
+
+        <h1>
+            Confira seu agendamento
+        </h1>
+
+        <p class="description">
+            Confira os dados e preencha seu protocolo antes de solicitar o atendimento.
+        </p>
+
+
+        <!-- RESUMO -->
+
+        <div
+            class="summary"
+            id="booking-summary"
+        ></div>
+
+
+        <!-- ==========================================
+             PROTOCOLO
+        =========================================== -->
+
+        <div class="protocol-box">
+
+            <h2>
+                Seu protocolo
+            </h2>
+
+            <p class="description">
+                Antes de finalizar, responda algumas perguntas rápidas para que possamos oferecer um atendimento mais seguro e personalizado.
+            </p>
+
+            <div
+                class="protocol-existing"
+                id="protocol-existing"
+                style="display: none;"
+            >
+                Seu protocolo já está cadastrado.
+                <br>
+                Alguma informação mudou?
+            </div>
+
+
+            <!-- ALERGIA -->
+
+            <div class="protocol-question">
+
+                <label>
+                    1. Você possui alguma alergia ou sensibilidade a cosméticos ou produtos para unhas?
+                </label>
+
+                <div class="radio-group">
+
+                    <label class="radio-option">
+
+                        <input
+                            type="radio"
+                            name="allergy"
+                            value="false"
+                            checked
+                            onchange="toggleProtocolField('allergy', false)"
+                        >
+
+                        Não
+
+                    </label>
+
+
+                    <label class="radio-option">
+
+                        <input
+                            type="radio"
+                            name="allergy"
+                            value="true"
+                            onchange="toggleProtocolField('allergy', true)"
+                        >
+
+                        Sim
+
+                    </label>
+
+                </div>
+
+
+                <div
+                    class="conditional-field"
+                    id="allergy-details"
+                >
+
+                    <div class="field">
+
+                        <label for="allergy-text">
+                            Qual?
+                        </label>
+
+                        <textarea
+                            id="allergy-text"
+                            placeholder="Conte brevemente"
+                        ></textarea>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- PROBLEMA ATUAL -->
+
+            <div class="protocol-question">
+
+                <label>
+                    2. Possui alguma ferida, inflamação, infecção ou alteração atual nas unhas ou na pele da região?
+                </label>
+
+                <div class="radio-group">
+
+                    <label class="radio-option">
+
+                        <input
+                            type="radio"
+                            name="current-issue"
+                            value="false"
+                            checked
+                            onchange="toggleProtocolField('current-issue', false)"
+                        >
+
+                        Não
+
+                    </label>
+
+
+                    <label class="radio-option">
+
+                        <input
+                            type="radio"
+                            name="current-issue"
+                            value="true"
+                            onchange="toggleProtocolField('current-issue', true)"
+                        >
+
+                        Sim
+
+                    </label>
+
+                </div>
+
+
+                <div
+                    class="conditional-field"
+                    id="current-issue-details"
+                >
+
+                    <div class="field">
+
+                        <label for="current-issue-text">
+                            Conte brevemente
+                        </label>
+
+                        <textarea
+                            id="current-issue-text"
+                            placeholder="Conte brevemente"
+                        ></textarea>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- REAÇÃO ANTERIOR -->
+
+            <div class="protocol-question">
+
+                <label>
+                    3. Já teve alguma reação ou problema após fazer unhas anteriormente?
+                </label>
+
+                <div class="radio-group">
+
+                    <label class="radio-option">
+
+                        <input
+                            type="radio"
+                            name="previous-reaction"
+                            value="false"
+                            checked
+                            onchange="toggleProtocolField('previous-reaction', false)"
+                        >
+
+                        Não
+
+                    </label>
+
+
+                    <label class="radio-option">
+
+                        <input
+                            type="radio"
+                            name="previous-reaction"
+                            value="true"
+                            onchange="toggleProtocolField('previous-reaction', true)"
+                        >
+
+                        Sim
+
+                    </label>
+
+                </div>
+
+
+                <div
+                    class="conditional-field"
+                    id="previous-reaction-details"
+                >
+
+                    <div class="field">
+
+                        <label for="previous-reaction-text">
+                            Conte brevemente
+                        </label>
+
+                        <textarea
+                            id="previous-reaction-text"
+                            placeholder="Conte brevemente"
+                        ></textarea>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- DIABETES -->
+
+            <div class="protocol-question">
+
+                <label>
+                    4. Você possui diabetes?
+                </label>
+
+                <div class="radio-group">
+
+                    <label class="radio-option">
+
+                        <input
+                            type="radio"
+                            name="diabetes"
+                            value="false"
+                            checked
+                        >
+
+                        Não
+
+                    </label>
+
+
+                    <label class="radio-option">
+
+                        <input
+                            type="radio"
+                            name="diabetes"
+                            value="true"
+                        >
+
+                        Sim
+
+                    </label>
+
+                </div>
+
+            </div>
+
+
+            <!-- OBSERVAÇÕES -->
+
+            <div class="field">
+
+                <label for="protocol-observations">
+                    Observações importantes
+                </label>
+
+                <textarea
+                    id="protocol-observations"
+                    placeholder="Alguma informação que você gostaria de avisar antes do atendimento?"
+                ></textarea>
+
+            </div>
+
+        </div>
+
+
+        <!-- ==========================================
+             POLÍTICAS
+        =========================================== -->
+
+        <div class="policy-box">
+
+            <h2>
+                Políticas de atendimento
+            </h2>
+
+            <p class="description">
+                Para concluir a solicitação, leia e confirme as condições de atendimento.
+            </p>
+
+            <ul class="policy-list">
+
+                <li>
+                    Atendimento de segunda a sexta, das 09:00 às 19:00.
+                </li>
+
+                <li>
+                    Sábados e domingos somente por encaixe, mediante disponibilidade.
+                </li>
+
+                <li>
+                    Tolerância de 15 minutos para atrasos.
+                </li>
+
+                <li>
+                    Cancelamentos ou reagendamentos devem ser feitos com pelo menos 24 horas de antecedência.
+                </li>
+
+                <li>
+                    Garantia de 7 dias para quebra da unha. Após esse prazo, será cobrada taxa de R$ 10 por unha quebrada.
+                </li>
+
+                <li>
+                    Atendimento a domicílio mediante disponibilidade e condições previamente combinadas.
+                </li>
+
+            </ul>
+
+
+            <label class="policy-acceptance">
+
+                <input
+                    type="checkbox"
+                    id="policies-accepted"
+                    onchange="updateFinishButton()"
+                >
+
+                <span>
+                    Li e estou de acordo com as políticas de atendimento.
+                </span>
+
+            </label>
+
+        </div>
+
+
+        <div
+            class="message"
+            id="message-step-4"
+        ></div>
+
+
+        <div class="buttons">
+
+            <button
+                type="button"
+                class="button-secondary"
+                onclick="goToStep(3)"
+            >
+                Voltar
+            </button>
+
+
+            <button
+                type="button"
+                class="button-primary"
+                id="finish-button"
+                onclick="finishBooking()"
+                disabled
+            >
+                Solicitar agendamento
+            </button>
+
+        </div>
+
+
+        <div class="small-note">
+            Ao solicitar, seu agendamento será salvo e o WhatsApp será aberto com a mensagem pronta para envio.
+        </div>
+
+    </section>
+
+</div>
+
+
+<script>
+
+    // ==========================================
+    // CONFIGURAÇÕES
+    // ==========================================
+
+    const SALON_WHATSAPP = "5582987846019";
+
+
+    // ==========================================
+    // ESTADO DO AGENDAMENTO
+    // ==========================================
+
+    const booking = {
+
+        clientName: "",
+        clientPhone: "",
+
+        serviceId: null,
+        serviceName: "",
+        servicePrice: null,
+        serviceDuration: null,
+
+        appointmentDate: "",
+        appointmentTime: "",
+        appointmentEndTime: "",
+
+        protocol: {
+
+            hasAllergyOrSensitivity: false,
+            allergyOrSensitivityDetails: "",
+
+            hasCurrentIssue: false,
+            currentIssueDetails: "",
+
+            hasPreviousReaction: false,
+            previousReactionDetails: "",
+
+            hasDiabetes: false,
+
+            observations: ""
+
+        },
+
+        policiesAccepted: false
+
+    };
+
+
+    // ==========================================
+    // DATA MÍNIMA
+    // ==========================================
+
+    function setMinimumDate() {
+
+        const dateInput =
+            document.getElementById("appointment-date");
+
+        const today =
+            new Date();
+
+        const year =
+            today.getFullYear();
+
+        const month =
+            String(today.getMonth() + 1).padStart(2, "0");
+
+        const day =
+            String(today.getDate()).padStart(2, "0");
+
+        dateInput.min =
+            `${year}-${month}-${day}`;
+
+    }
+
+
+    // ==========================================
+    // TROCAR ETAPA
+    // ==========================================
+
+    function goToStep(stepNumber) {
+
+        document
+            .querySelectorAll(".step")
+            .forEach(step => {
+
+                step.classList.remove("active");
+
+            });
+
+
+        document
+            .querySelectorAll(".progress-step")
+            .forEach(step => {
+
+                step.classList.remove("active");
+
+            });
+
+
+        document
+            .getElementById(`step-${stepNumber}`)
+            .classList.add("active");
+
+
+        document
+            .getElementById(`progress-${stepNumber}`)
+            .classList.add("active");
+
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+
+    }
+
+
+    // ==========================================
+    // MENSAGENS
+    // ==========================================
+
+    function showMessage(elementId, message) {
+
+        const element =
+            document.getElementById(elementId);
+
+        element.textContent =
+            message;
+
+        element.classList.add("show");
+
+    }
+
+
+    function hideMessage(elementId) {
+
+        const element =
+            document.getElementById(elementId);
+
+        element.textContent =
+            "";
+
+        element.classList.remove("show");
+
+    }
+
+
+    // ==========================================
+    // ETAPA 1
+    // ==========================================
+
+    function goToStep2() {
+
+        const nameInput =
+            document.getElementById("client-name");
+
+        const phoneInput =
+            document.getElementById("client-phone");
+
+
+        const name =
+            nameInput.value.trim();
+
+        const phone =
+            phoneInput.value.trim();
+
+
+        if (!name) {
+
+            showMessage(
+                "message-step-1",
+                "Digite seu nome para continuar."
+            );
+
+            return;
+
+        }
+
+
+        if (!phone) {
+
+            showMessage(
+                "message-step-1",
+                "Digite seu WhatsApp para continuar."
+            );
+
+            return;
+
+        }
+
+
+        const phoneDigits =
+            phone.replace(/\D/g, "");
+
+
+        if (phoneDigits.length < 10) {
+
+            showMessage(
+                "message-step-1",
+                "Digite um número de WhatsApp válido."
+            );
+
+            return;
+
+        }
+
+
+        booking.clientName =
+            name;
+
+        booking.clientPhone =
+            phoneDigits;
+
+
+        hideMessage("message-step-1");
+
+        loadServices();
+
+        goToStep(2);
+
+    }
+
+
+    // ==========================================
+    // CARREGAR SERVIÇOS
+    // ==========================================
+
+    async function loadServices() {
+
+        const serviceList =
+            document.getElementById("service-list");
+
+
+        serviceList.innerHTML =
+            '<div class="loading">Carregando serviços...</div>';
+
+
+        try {
+
+            const response =
+                await fetch("/services/?active=true");
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Não foi possível carregar os serviços."
+                );
+
+            }
+
+
+            const data =
+                await response.json();
+
+
+            renderServices(data);
+
+        } catch (error) {
+
+            serviceList.innerHTML =
+                "";
+
+            showMessage(
+                "message-step-2",
+                "Não foi possível carregar os serviços. Tente novamente."
+            );
+
+        }
+
+    }
+
+
+    // ==========================================
+    // RENDERIZAR SERVIÇOS
+    // ==========================================
+
+    function renderServices(services) {
+
+        const serviceList =
+            document.getElementById("service-list");
+
+
+        serviceList.innerHTML =
+            "";
+
+
+        if (!services || services.length === 0) {
+
+            serviceList.innerHTML =
+                '<div class="loading">Nenhum serviço disponível no momento.</div>';
+
+            return;
+
+        }
+
+
+        services.forEach(service => {
+
+            const button =
+                document.createElement("button");
+
+
+            button.type =
+                "button";
+
+
+            button.className =
+                "service-option";
+
+
+            button.innerHTML = `
+
+                <div class="service-name">
+                    ${escapeHtml(service.name)}
+                </div>
+
+                <div class="service-details">
+                    R$ ${Number(service.price).toFixed(2).replace(".", ",")}
+                    · ${service.duration_minutes} minutos
+                </div>
+
+            `;
+
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    document
+                        .querySelectorAll(".service-option")
+                        .forEach(option => {
+
+                            option.classList.remove("selected");
+
+                        });
+
+
+                    button.classList.add("selected");
+
+
+                    booking.serviceId =
+                        service.id;
+
+                    booking.serviceName =
+                        service.name;
+
+                    booking.servicePrice =
+                        service.price;
+
+                    booking.serviceDuration =
+                        service.duration_minutes;
+
+
+                    hideMessage(
+                        "message-step-2"
+                    );
+
+                }
+            );
+
+
+            serviceList.appendChild(button);
+
+        });
+
+    }
+
+
+    // ==========================================
+    // ETAPA 2 → 3
+    // ==========================================
+
+    function goToStep3() {
+
+        if (!booking.serviceId) {
+
+            showMessage(
+                "message-step-2",
+                "Escolha um serviço para continuar."
+            );
+
+            return;
+
+        }
+
+
+        hideMessage("message-step-2");
+
+        loadAvailableTimes();
+
+        goToStep(3);
+
+    }
+
+
+    // ==========================================
+    // CARREGAR HORÁRIOS
+    // ==========================================
+
+    async function loadAvailableTimes() {
+
+        const dateInput =
+            document.getElementById("appointment-date");
+
+
+        const date =
+            dateInput.value;
+
+
+        const timeList =
+            document.getElementById("time-list");
+
+        const weekendContact =
+            document.getElementById("weekend-contact");
+
+
+        booking.appointmentDate =
+            date;
+
+        booking.appointmentTime =
+            "";
+
+        booking.appointmentEndTime =
+            "";
+
+
+        weekendContact.classList.remove("show");
+
+
+        if (!date) {
+
+            timeList.innerHTML =
+                '<div class="loading">Escolha uma data para visualizar os horários.</div>';
+
+            return;
+
+        }
+
+
+        const selectedDate =
+            new Date(`${date}T12:00:00`);
+
+        const dayOfWeek =
+            selectedDate.getDay();
+
+
+        if (dayOfWeek === 0 || dayOfWeek === 6) {
+
+            timeList.innerHTML =
+                "";
+
+            weekendContact.classList.add("show");
+
+            return;
+
+        }
+
+
+        timeList.innerHTML =
+            '<div class="loading">Carregando horários...</div>';
+
+
+        try {
+
+            const response =
+                await fetch(
+                    `/availability/?appointment_date=${encodeURIComponent(date)}&service_id=${encodeURIComponent(booking.serviceId)}`
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Não foi possível carregar os horários."
+                );
+
+            }
+
+
+            const data =
+                await response.json();
+
+
+            renderAvailableTimes(
+                data.available_times || []
+            );
+
+        } catch (error) {
+
+            timeList.innerHTML =
+                "";
+
+            showMessage(
+                "message-step-3",
+                "Não foi possível carregar os horários. Tente novamente."
+            );
+
+        }
+
+    }
+
+
+    // ==========================================
+    // RENDERIZAR HORÁRIOS
+    // ==========================================
+
+    function renderAvailableTimes(times) {
+
+        const timeList =
+            document.getElementById("time-list");
+
+
+        const weekendContact =
+            document.getElementById("weekend-contact");
+
+
+        weekendContact.classList.remove("show");
+
+
+        timeList.innerHTML =
+            "";
+
+
+        if (!times || times.length === 0) {
+
+            timeList.innerHTML =
+                '<div class="loading">Nenhum horário disponível para esta data.</div>';
+
+            return;
+
+        }
+
+
+        times.forEach(time => {
+
+            const startTime =
+                typeof time === "string"
+                    ? time
+                    : time.start;
+
+
+            const endTime =
+                typeof time === "string"
+                    ? null
+                    : time.end;
+
+
+            if (!startTime) {
+
+                return;
+
+            }
+
+
+            const button =
+                document.createElement("button");
+
+
+            button.type =
+                "button";
+
+
+            button.className =
+                "time-option";
+
+
+            button.textContent =
+                formatTime(startTime);
+
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    document
+                        .querySelectorAll(".time-option")
+                        .forEach(option => {
+
+                            option.classList.remove("selected");
+
+                        });
+
+
+                    button.classList.add("selected");
+
+
+                    booking.appointmentTime =
+                        startTime;
+
+
+                    booking.appointmentEndTime =
+                        endTime || "";
+
+
+                    hideMessage(
+                        "message-step-3"
+                    );
+
+                }
+            );
+
+
+            timeList.appendChild(button);
+
+        });
+
+    }
+
+
+    // ==========================================
+    // CONTATO PARA ENCAIXE
+    // ==========================================
+
+    function contactWeekendAvailability() {
+
+        const date =
+            booking.appointmentDate;
+
+
+        const formattedDate =
+            formatDate(date);
+
+
+        const message =
+`Olá, Jeni! Gostaria de consultar a disponibilidade para um encaixe no dia ${formattedDate}.`;
+
+
+        const whatsappUrl =
+            `https://wa.me/${SALON_WHATSAPP}?text=${encodeURIComponent(message)}`;
+
+
+        window.location.href =
+            whatsappUrl;
+
+    }
+
+
+    // ==========================================
+    // FORMATAR HORÁRIO
+    // ==========================================
+
+    function formatTime(time) {
+
+        if (!time) {
+
+            return "";
+
+        }
+
+
+        return time.substring(0, 5);
+
+    }
+
+
+    // ==========================================
+    // ETAPA 3 → 4
+    // ==========================================
+
+    function goToStep4() {
+
+        if (!booking.appointmentDate) {
+
+            showMessage(
+                "message-step-3",
+                "Escolha uma data para continuar."
+            );
+
+            return;
+
+        }
+
+
+        if (!booking.appointmentTime) {
+
+            showMessage(
+                "message-step-3",
+                "Escolha um horário para continuar."
+            );
+
+            return;
+
+        }
+
+
+        hideMessage("message-step-3");
+
+        renderSummary();
+
+        goToStep(4);
+
+    }
+
+
+    // ==========================================
+    // RESUMO
+    // ==========================================
+
+    function renderSummary() {
+
+        const summary =
+            document.getElementById("booking-summary");
+
+
+        const formattedDate =
+            formatDate(
+                booking.appointmentDate
+            );
+
+
+        const price =
+            Number(
+                booking.servicePrice
+            )
+            .toFixed(2)
+            .replace(".", ",");
+
+
+        summary.innerHTML = `
+
+            <div class="summary-row">
+
+                <span class="summary-label">
+                    Cliente
+                </span>
+
+                <span class="summary-value">
+                    ${escapeHtml(booking.clientName)}
+                </span>
+
+            </div>
+
+
+            <div class="summary-row">
+
+                <span class="summary-label">
+                    WhatsApp
+                </span>
+
+                <span class="summary-value">
+                    ${escapeHtml(booking.clientPhone)}
+                </span>
+
+            </div>
+
+
+            <div class="summary-row">
+
+                <span class="summary-label">
+                    Serviço
+                </span>
+
+                <span class="summary-value">
+                    ${escapeHtml(booking.serviceName)}
+                </span>
+
+            </div>
+
+
+            <div class="summary-row">
+
+                <span class="summary-label">
+                    Valor
+                </span>
+
+                <span class="summary-value">
+                    R$ ${price}
+                </span>
+
+            </div>
+
+
+            <div class="summary-row">
+
+                <span class="summary-label">
+                    Data
+                </span>
+
+                <span class="summary-value">
+                    ${formattedDate}
+                </span>
+
+            </div>
+
+
+            <div class="summary-row">
+
+                <span class="summary-label">
+                    Horário
+                </span>
+
+                <span class="summary-value">
+                    ${formatTime(booking.appointmentTime)}
+                    ${
+                        booking.appointmentEndTime
+                            ? " às " +
+                              formatTime(
+                                  booking.appointmentEndTime
+                              )
+                            : ""
+                    }
+                </span>
+
+            </div>
+
+        `;
+
+    }
+
+
+    // ==========================================
+    // FORMATAR DATA
+    // ==========================================
+
+    function formatDate(dateString) {
+
+        if (!dateString) {
+
+            return "";
+
+        }
+
+
+        const parts =
+            dateString.split("-");
+
+
+        if (parts.length !== 3) {
+
+            return dateString;
+
+        }
+
+
+        return `${parts[2]}/${parts[1]}/${parts[0]}`;
+
+    }
+
+
+    // ==========================================
+    // CAMPOS CONDICIONAIS DO PROTOCOLO
+    // ==========================================
+
+    function toggleProtocolField(
+        type,
+        show
+    ) {
+
+        let fieldId;
+
+
+        if (type === "allergy") {
+
+            fieldId =
+                "allergy-details";
+
+            booking.protocol.hasAllergyOrSensitivity =
+                show;
+
+        }
+
+
+        if (type === "current-issue") {
+
+            fieldId =
+                "current-issue-details";
+
+            booking.protocol.hasCurrentIssue =
+                show;
+
+        }
+
+
+        if (type === "previous-reaction") {
+
+            fieldId =
+                "previous-reaction-details";
+
+            booking.protocol.hasPreviousReaction =
+                show;
+
+        }
+
+
+        const field =
+            document.getElementById(fieldId);
+
+
+        if (show) {
+
+            field.classList.add("show");
+
+        } else {
+
+            field.classList.remove("show");
+
+        }
+
+    }
+
+
+    // ==========================================
+    // BOTÃO FINAL
+    // ==========================================
+
+    function updateFinishButton() {
+
+        const checkbox =
+            document.getElementById(
+                "policies-accepted"
+            );
+
+
+        const button =
+            document.getElementById(
+                "finish-button"
+            );
+
+
+        booking.policiesAccepted =
+            checkbox.checked;
+
+
+        button.disabled =
+            !checkbox.checked;
+
+    }
+
+
+    // ==========================================
+    // VALIDAR PROTOCOLO
+    // ==========================================
+
+    function collectProtocol() {
+
+        booking.protocol = {
+
+            hasAllergyOrSensitivity:
+                document.querySelector(
+                    'input[name="allergy"]:checked'
+                ).value === "true",
+
+            allergyOrSensitivityDetails:
+                document.getElementById(
+                    "allergy-text"
+                ).value.trim(),
+
+
+            hasCurrentIssue:
+                document.querySelector(
+                    'input[name="current-issue"]:checked'
+                ).value === "true",
+
+            currentIssueDetails:
+                document.getElementById(
+                    "current-issue-text"
+                ).value.trim(),
+
+
+            hasPreviousReaction:
+                document.querySelector(
+                    'input[name="previous-reaction"]:checked'
+                ).value === "true",
+
+            previousReactionDetails:
+                document.getElementById(
+                    "previous-reaction-text"
+                ).value.trim(),
+
+
+            hasDiabetes:
+                document.querySelector(
+                    'input[name="diabetes"]:checked'
+                ).value === "true",
+
+
+            observations:
+                document.getElementById(
+                    "protocol-observations"
+                ).value.trim()
+
+        };
+
+    }
+
+
+    // ==========================================
+    // FINALIZAR AGENDAMENTO
+    // ==========================================
+
+    async function finishBooking() {
+
+        const checkbox =
+            document.getElementById(
+                "policies-accepted"
+            );
+
+
+        if (!checkbox.checked) {
+
+            showMessage(
+                "message-step-4",
+                "É necessário aceitar as políticas de atendimento."
+            );
+
+            return;
+
+        }
+
+
+        if (!booking.appointmentDate) {
+
+            showMessage(
+                "message-step-4",
+                "A data do agendamento não foi informada."
+            );
+
+            return;
+
+        }
+
+
+        if (!booking.appointmentTime) {
+
+            showMessage(
+                "message-step-4",
+                "O horário do agendamento não foi informado."
+            );
+
+            return;
+
+        }
+
+
+        collectProtocol();
+
+
+        const button =
+            document.getElementById(
+                "finish-button"
+            );
+
+
+        button.disabled =
+            true;
+
+
+        button.textContent =
+            "Salvando...";
+
+
+        hideMessage(
+            "message-step-4"
+        );
+
+
+        const startAt =
+            `${booking.appointmentDate}T${booking.appointmentTime}:00`;
+
+
+        const payload = {
+
+            client_name:
+                booking.clientName,
+
+            client_phone:
+                booking.clientPhone,
+
+            client_email:
+                null,
+
+            service_id:
+                booking.serviceId,
+
+            start_at:
+                startAt,
+
+            payment_method:
+                null,
+
+            notes:
+                null,
+
+            return_type:
+                "none",
+
+            return_date:
+                null,
+
+            policies_accepted:
+                true,
+
+            protocol: {
+
+                has_allergy_or_sensitivity:
+                    booking.protocol.hasAllergyOrSensitivity,
+
+                allergy_or_sensitivity_details:
+                    booking.protocol.allergyOrSensitivityDetails || null,
+
+                has_current_issue:
+                    booking.protocol.hasCurrentIssue,
+
+                current_issue_details:
+                    booking.protocol.currentIssueDetails || null,
+
+                has_previous_reaction:
+                    booking.protocol.hasPreviousReaction,
+
+                previous_reaction_details:
+                    booking.protocol.previousReactionDetails || null,
+
+                has_diabetes:
+                    booking.protocol.hasDiabetes,
+
+                observations:
+                    booking.protocol.observations || null
+
+            }
+
+        };
+
+
+        try {
+
+            const response =
+                await fetch(
+                    "/appointments/",
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body:
+                            JSON.stringify(payload)
+                    }
+                );
+
+
+            const data =
+                await response.json();
+
+
+            if (!response.ok) {
+
+                let errorMessage =
+                    "Não foi possível realizar o agendamento.";
+
+
+                if (data.detail) {
+
+                    errorMessage =
+                        typeof data.detail === "string"
+                            ? data.detail
+                            : "Verifique os dados informados.";
+
+                }
+
+
+                throw new Error(
+                    errorMessage
+                );
+
+            }
+
+
+            const appointment =
+                data.appointment;
+
+
+            const whatsappMessage =
+                buildWhatsAppMessage(
+                    appointment
+                );
+
+
+            const whatsappUrl =
+                `https://wa.me/${SALON_WHATSAPP}?text=${encodeURIComponent(whatsappMessage)}`;
+
+
+            button.textContent =
+                "Abrindo WhatsApp...";
+
+
+            showMessage(
+                "message-step-4",
+                "Agendamento salvo! Abrindo o WhatsApp com sua solicitação..."
+            );
+
+
+            setTimeout(
+                () => {
+
+                    window.location.href =
+                        whatsappUrl;
+
+                },
+                700
+            );
+
+
+        } catch (error) {
+
+            button.disabled =
+                false;
+
+
+            button.textContent =
+                "Solicitar agendamento";
+
+
+            showMessage(
+                "message-step-4",
+                error.message ||
+                "Não foi possível realizar o agendamento. Tente novamente."
+            );
+
+        }
+
+    }
+
+
+    // ==========================================
+    // MENSAGEM DO WHATSAPP
+    // ==========================================
+
+    function buildWhatsAppMessage(
+        appointment
+    ) {
+
+        const client =
+            appointment.client;
+
+
+        const service =
+            appointment.service;
+
+
+        const date =
+            formatDate(
+                booking.appointmentDate
+            );
+
+
+        const start =
+            formatTime(
+                booking.appointmentTime
+            );
+
+
+        const end =
+            booking.appointmentEndTime
+                ? formatTime(
+                    booking.appointmentEndTime
+                )
+                : "";
+
+
+        const price =
+            Number(
+                service.price
+            )
+            .toFixed(2)
+            .replace(".", ",");
+
+
+        return `Olá, Jeni! Gostaria de solicitar meu atendimento.
+
+Cliente: ${client.name}
+Serviço: ${service.name}
+Data: ${date}
+Horário: ${start}${end ? " às " + end : ""}
+Valor: R$ ${price}
+
+Meu protocolo foi preenchido e estou de acordo com as políticas de atendimento.`;
+
+    }
+
+
+    // ==========================================
+    // ESCAPAR HTML
+    // ==========================================
+
+    function escapeHtml(value) {
+
+        if (value === null || value === undefined) {
+
+            return "";
+
+        }
+
+
+        return String(value)
+
+            .replace(/&/g, "&amp;")
+
+            .replace(/</g, "&lt;")
+
+            .replace(/>/g, "&gt;")
+
+            .replace(/"/g, "&quot;")
+
+            .replace(/'/g, "&#039;");
+
+    }
+
+
+    // ==========================================
+    // INICIALIZAÇÃO
+    // ==========================================
+
+    setMinimumDate();
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,8 @@
+﻿.venv/
+__pycache__/
+*.pyc
+.env
+.env.*
+jeni_santos_nails.db
+*_backup_*.db
+_auditoria_temp.py

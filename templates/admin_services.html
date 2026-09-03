@@ -1,0 +1,428 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Jeni Santos Nails | Serviços</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f7f7f7;
+            color: #333;
+        }
+
+        header {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+        }
+
+        header h1 {
+            margin: 0 0 5px 0;
+        }
+
+        header p {
+            margin: 0 0 15px 0;
+            color: #666;
+        }
+
+        nav a {
+            margin-right: 15px;
+            text-decoration: none;
+            color: #333;
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .filters {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .filters form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: end;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .field label {
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .field select {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            min-width: 220px;
+        }
+
+        button {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            background: #333;
+            color: white;
+            font-size: 14px;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        .clear-link {
+            padding: 10px 16px;
+            text-decoration: none;
+            color: #333;
+        }
+
+        .summary {
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .service-card {
+            background: white;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+        }
+
+        .service-card h3 {
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+
+        .service-description {
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .service-info {
+            display: grid;
+            grid-template-columns: repeat(
+                auto-fit,
+                minmax(180px, 1fr)
+            );
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .service-info p {
+            margin: 0;
+        }
+
+        .status-active {
+            color: #176b2c;
+            font-weight: bold;
+        }
+
+        .status-inactive {
+            color: #a12626;
+            font-weight: bold;
+        }
+
+        .service-actions {
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .edit-link {
+            display: inline-block;
+            padding: 10px 16px;
+            background: #333;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .edit-link:hover {
+            opacity: 0.9;
+        }
+
+        .action-form {
+            margin: 0;
+        }
+
+        .action-button {
+            background: #555;
+        }
+
+        .empty {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            color: #666;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+
+            .filters form {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .field select {
+                min-width: 0;
+                width: 100%;
+                box-sizing: border-box;
+            }
+
+            button,
+            .clear-link {
+                width: 100%;
+                box-sizing: border-box;
+                text-align: center;
+            }
+
+            nav a {
+                display: block;
+                margin-bottom: 10px;
+            }
+
+            .edit-link,
+            .action-form {
+                width: 100%;
+            }
+
+            .action-button {
+                width: 100%;
+            }
+
+            .service-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+
+    <h1>Jeni Santos Nails</h1>
+
+    <p>Painel Administrativo</p>
+
+    <nav>
+        <a href="/admin">
+            Dashboard
+        </a>
+
+        <a href="/admin/appointments">
+            Agendamentos
+        </a>
+
+        <a href="/admin/clients">
+            Clientes
+        </a>
+
+        <a href="/admin/services">
+            Serviços
+        </a>
+
+        <a href="/admin/logout">
+            Sair
+        </a>
+    </nav>
+
+</header>
+
+<main>
+
+    <h2>Serviços</h2>
+
+    <section class="filters">
+
+        <form method="get" action="/admin/services">
+
+            <div class="field">
+
+                <label for="active">
+                    Status
+                </label>
+
+                <select id="active" name="active">
+
+                    <option value="">
+                        Todos
+                    </option>
+
+                    <option
+                        value="active"
+                        {% if active == "active" %}selected{% endif %}
+                    >
+                        Ativos
+                    </option>
+
+                    <option
+                        value="inactive"
+                        {% if active == "inactive" %}selected{% endif %}
+                    >
+                        Inativos
+                    </option>
+
+                </select>
+
+            </div>
+
+            <button type="submit">
+                Filtrar
+            </button>
+
+            <a
+                class="clear-link"
+                href="/admin/services"
+            >
+                Limpar filtro
+            </a>
+
+        </form>
+
+    </section>
+
+    <div class="summary">
+        Serviços encontrados: {{ services|length }}
+    </div>
+
+    {% if services %}
+
+        {% for service in services %}
+
+            <article class="service-card">
+
+                <h3>
+                    {{ service.name }}
+                </h3>
+
+                {% if service.description %}
+
+                    <div class="service-description">
+                        {{ service.description }}
+                    </div>
+
+                {% endif %}
+
+                <div class="service-info">
+
+                    <p>
+                        <strong>Preço:</strong>
+                        R$ {{ "%.2f"|format(service.price|float) }}
+                    </p>
+
+                    <p>
+                        <strong>Duração:</strong>
+                        {{ service.duration_minutes }} minutos
+                    </p>
+
+                    <p>
+                        <strong>Status:</strong>
+
+                        {% if service.active %}
+
+                            <span class="status-active">
+                                Ativo
+                            </span>
+
+                        {% else %}
+
+                            <span class="status-inactive">
+                                Inativo
+                            </span>
+
+                        {% endif %}
+
+                    </p>
+
+                </div>
+
+                <div class="service-actions">
+
+                    <a
+                        class="edit-link"
+                        href="/admin/services/{{ service.id }}/edit"
+                    >
+                        Editar serviço
+                    </a>
+
+                    {% if service.active %}
+
+                        <form
+                            class="action-form"
+                            method="post"
+                            action="/admin/services/{{ service.id }}/deactivate"
+                            onsubmit="return confirm('Tem certeza que deseja desativar este serviço?');"
+                        >
+                            <button
+                                type="submit"
+                                class="action-button"
+                            >
+                                Desativar serviço
+                            </button>
+                        </form>
+
+                    {% else %}
+
+                        <form
+                            class="action-form"
+                            method="post"
+                            action="/admin/services/{{ service.id }}/activate"
+                            onsubmit="return confirm('Tem certeza que deseja ativar este serviço?');"
+                        >
+                            <button
+                                type="submit"
+                                class="action-button"
+                            >
+                                Ativar serviço
+                            </button>
+                        </form>
+
+                    {% endif %}
+
+                </div>
+
+            </article>
+
+        {% endfor %}
+
+    {% else %}
+
+        <div class="empty">
+            Nenhum serviço encontrado.
+        </div>
+
+    {% endif %}
+
+</main>
+
+</body>
+
+</html>

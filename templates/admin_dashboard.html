@@ -1,0 +1,244 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Jeni Santos Nails | Dashboard</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f7f7f7;
+            color: #333;
+        }
+
+        header {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+        }
+
+        header h1 {
+            margin: 0 0 5px 0;
+        }
+
+        header p {
+            margin: 0 0 15px 0;
+            color: #666;
+        }
+
+        nav a {
+            margin-right: 15px;
+            text-decoration: none;
+            color: #333;
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(
+                auto-fit,
+                minmax(220px, 1fr)
+            );
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+        }
+
+        .card h3 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .number {
+            font-size: 36px;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .actions {
+            background: white;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 10px;
+        }
+
+        .actions h3 {
+            margin-top: 0;
+        }
+
+        .action-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .action-link {
+            display: inline-block;
+            padding: 10px 16px;
+            background: #333;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+        }
+
+        .action-link:hover {
+            opacity: 0.85;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+
+            nav a {
+                display: block;
+                margin-bottom: 10px;
+            }
+
+            .action-link {
+                width: 100%;
+                box-sizing: border-box;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+
+    <h1>Jeni Santos Nails</h1>
+
+    <p>Painel Administrativo</p>
+
+    <nav>
+        <a href="/admin">Dashboard</a>
+
+        <a href="/admin/appointments">
+            Agendamentos
+        </a>
+
+        <a href="/admin/clients">
+            Clientes
+        </a>
+
+        <a href="/admin/services">
+            Serviços
+        </a>
+
+        <a href="/admin/logout">
+            Sair
+        </a>
+    </nav>
+
+</header>
+
+<main>
+
+    <h2>Dashboard</h2>
+
+    <section class="cards">
+
+        <div class="card">
+
+            <h3>Clientes</h3>
+
+            <p class="number">
+                {{ clients_count }}
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>Serviços ativos</h3>
+
+            <p class="number">
+                {{ services_count }}
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>Agendamentos</h3>
+
+            <p class="number">
+                {{ appointments_count }}
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>Agendamentos pendentes</h3>
+
+            <p class="number">
+                {{ pending_count }}
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <section class="actions">
+
+        <h3>Acesso rápido</h3>
+
+        <div class="action-links">
+
+            <a
+                class="action-link"
+                href="/admin/appointments"
+            >
+                Ver agendamentos
+            </a>
+
+            <a
+                class="action-link"
+                href="/admin/clients"
+            >
+                Ver clientes
+            </a>
+
+            <a
+                class="action-link"
+                href="/admin/services"
+            >
+                Ver serviços
+            </a>
+
+        </div>
+
+    </section>
+
+</main>
+
+</body>
+
+</html>

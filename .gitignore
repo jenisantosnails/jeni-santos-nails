@@ -6,3 +6,6 @@ __pycache__/
 jeni_santos_nails.db
 *_backup_*.db
 _auditoria_temp.py
+
+# Backups antigos de arquivos do projeto
+**/*_backup_*

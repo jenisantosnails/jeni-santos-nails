@@ -9,3 +9,6 @@ _auditoria_temp.py
 
 # Backups antigos de arquivos do projeto
 **/*_backup_*
+
+# Pasta local de backups
+backups/

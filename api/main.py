@@ -1,8 +1,6 @@
 ﻿from fastapi import FastAPI
-from fastapi.staticfiles import StaticFiles
 from starlette.middleware.sessions import SessionMiddleware
 import os
-from pathlib import Path
 
 from api.services import router as services_router
 from api.availability import router as availability_router
@@ -17,9 +15,6 @@ from api.client_protocol import router as client_protocol_router
 from api.admin import router as admin_router
 
 
-BASE_DIR = Path(__file__).resolve().parent.parent
-
-
 app = FastAPI(
     title="Jeni Santos Nails",
     description="API do sistema de agendamento da Jeni Santos Nails",
@@ -31,13 +26,6 @@ app.add_middleware(
     SessionMiddleware,
     secret_key=os.environ["ADMIN_SECRET_KEY"],
     same_site="lax",
-)
-
-
-app.mount(
-    "/static",
-    StaticFiles(directory=str(BASE_DIR / "static")),
-    name="static",
 )
 
 

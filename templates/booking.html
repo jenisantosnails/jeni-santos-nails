@@ -119,13 +119,16 @@
         }
 
         .field input,
-        .field textarea {
+        .field textarea,
+        .field select {
             width: 100%;
             padding: 13px;
             border: 1px solid #ddd;
             border-radius: 9px;
             font-size: 15px;
             font-family: inherit;
+            background: white;
+            color: #333;
         }
 
         .field textarea {
@@ -730,6 +733,45 @@
         ></div>
 
 
+        <!-- FORMA DE PAGAMENTO -->
+
+        <div class="field">
+
+            <label for="payment-method">
+                Forma de pagamento
+            </label>
+
+            <select
+                id="payment-method"
+                required
+                onchange="updateFinishButton()"
+            >
+
+                <option value="">
+                    Selecione
+                </option>
+
+                <option value="pix">
+                    Pix
+                </option>
+
+                <option value="credit_card">
+                    Cartão de crédito
+                </option>
+
+                <option value="debit_card">
+                    Cartão de débito
+                </option>
+
+                <option value="cash">
+                    Dinheiro
+                </option>
+
+            </select>
+
+        </div>
+
+
         <!-- ==========================================
              PROTOCOLO
         =========================================== -->
@@ -1131,6 +1173,8 @@
         appointmentDate: "",
         appointmentTime: "",
         appointmentEndTime: "",
+
+        paymentMethod: "",
 
         protocol: {
 
@@ -1918,6 +1962,71 @@
 
 
     // ==========================================
+    // FORMA DE PAGAMENTO
+    // ==========================================
+
+    function getPaymentMethodLabel(
+        paymentMethod
+    ) {
+
+        const labels = {
+
+            pix:
+                "Pix",
+
+            credit_card:
+                "Cartão de crédito",
+
+            debit_card:
+                "Cartão de débito",
+
+            cash:
+                "Dinheiro"
+
+        };
+
+
+        return labels[paymentMethod] || "";
+
+    }
+
+
+    function updateFinishButton() {
+
+        const checkbox =
+            document.getElementById(
+                "policies-accepted"
+            );
+
+
+        const paymentSelect =
+            document.getElementById(
+                "payment-method"
+            );
+
+
+        const button =
+            document.getElementById(
+                "finish-button"
+            );
+
+
+        booking.policiesAccepted =
+            checkbox.checked;
+
+
+        booking.paymentMethod =
+            paymentSelect.value;
+
+
+        button.disabled =
+            !checkbox.checked ||
+            !paymentSelect.value;
+
+    }
+
+
+    // ==========================================
     // FORMATAR DATA
     // ==========================================
 
@@ -2009,34 +2118,6 @@
 
 
     // ==========================================
-    // BOTÃO FINAL
-    // ==========================================
-
-    function updateFinishButton() {
-
-        const checkbox =
-            document.getElementById(
-                "policies-accepted"
-            );
-
-
-        const button =
-            document.getElementById(
-                "finish-button"
-            );
-
-
-        booking.policiesAccepted =
-            checkbox.checked;
-
-
-        button.disabled =
-            !checkbox.checked;
-
-    }
-
-
-    // ==========================================
     // VALIDAR PROTOCOLO
     // ==========================================
 
@@ -2105,6 +2186,24 @@
             );
 
 
+        const paymentSelect =
+            document.getElementById(
+                "payment-method"
+            );
+
+
+        if (!paymentSelect.value) {
+
+            showMessage(
+                "message-step-4",
+                "Selecione uma forma de pagamento para continuar."
+            );
+
+            return;
+
+        }
+
+
         if (!checkbox.checked) {
 
             showMessage(
@@ -2139,6 +2238,10 @@
             return;
 
         }
+
+
+        booking.paymentMethod =
+            paymentSelect.value;
 
 
         collectProtocol();
@@ -2185,7 +2288,7 @@
                 startAt,
 
             payment_method:
-                null,
+                booking.paymentMethod,
 
             notes:
                 null,
@@ -2376,6 +2479,12 @@
             .replace(".", ",");
 
 
+        const paymentMethod =
+            getPaymentMethodLabel(
+                booking.paymentMethod
+            );
+
+
         return `Olá, Jeni! Gostaria de solicitar meu atendimento.
 
 Cliente: ${client.name}
@@ -2383,6 +2492,7 @@ Serviço: ${service.name}
 Data: ${date}
 Horário: ${start}${end ? " às " + end : ""}
 Valor: R$ ${price}
+Forma de pagamento: ${paymentMethod}
 
 Meu protocolo foi preenchido e estou de acordo com as políticas de atendimento.`;
 
